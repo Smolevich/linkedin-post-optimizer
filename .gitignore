@@ -1,0 +1,13 @@
+# User's personal profile context (contains private info)
+profile-context.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
