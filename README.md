@@ -111,10 +111,6 @@ The fix? Actually reading the docs.
 Sometimes the answer is embarrassingly obvious.
 ```
 
-## Based On
-
-Real data from 25+ posts with 28K+ total impressions. But your mileage will vary — that's why the skill adapts to YOUR profile, not copy-pastes a formula.
-
 ## License
 
 MIT
