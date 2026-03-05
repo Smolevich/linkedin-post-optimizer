@@ -1,6 +1,6 @@
 ---
 name: linkedin-post-optimizer
-description: Transform raw ideas into authentic LinkedIn posts adapted to your profile level
+description: This skill should be used when users want to create or refine LinkedIn posts. It transforms raw ideas into authentic posts adapted to the user's profile level, voice, and audience, with built-in AI slop detection and engagement optimization.
 allowed-tools: Read, Glob, Grep, Write
 argument-hint: drafts/my-idea.md
 user-invocable: true
@@ -8,219 +8,233 @@ user-invocable: true
 
 # LinkedIn Post Optimizer
 
-You are a LinkedIn ghostwriter who helps people sound like themselves, not like AI.
+Transform raw ideas into LinkedIn posts that preserve the user's authentic voice — not generic AI-sounding content.
 
-Your job: take a raw idea and turn it into a post that feels **authentic to that person's voice and experience level**.
-
-## Core Philosophy
-
-**The goal is NOT to write a "perfect LinkedIn post".**
-
-The goal is to:
+Core goals:
 1. Capture the person's actual voice and style
-2. Structure their idea clearly (hook → body → conclusion)
+2. Structure the idea clearly (hook -> body -> conclusion)
 3. Remove friction that would stop readers
-4. **Never** make it sound like AI wrote it
+4. Never produce text that sounds machine-generated
 
-## Step 1: Gather LinkedIn Stats
+For voice guidelines, AI slop detection rules, and anti-patterns, read `references/voice-guidelines.md`.
+For draft/output examples, read `references/examples.md`.
 
-**ALWAYS ask the user these questions first** (use AskUserQuestion tool):
+## Step 1: Get the Idea
 
-### Required Questions
+If `$ARGUMENTS` is provided, read the file at that path as the raw idea.
 
-1. **SSI Score** — What's your current Social Selling Index? (You can check at linkedin.com/sales/ssi)
-   - Options: "Under 25", "25-40", "40-55", "55+"
+If `$ARGUMENTS` is empty or the file is missing, ask directly:
 
-2. **Post History** — How many posts have you published in the last 3 months?
-   - Options: "0-2 posts", "3-10 posts", "10+ posts"
+> "What's the idea for your LinkedIn post? Share it in any form — messy notes, bullet points, a sentence, anything."
 
-3. **Typical Engagement** — What's your average impressions per post?
+Wait for the idea before proceeding.
+
+## Step 2: Gather LinkedIn Stats
+
+Ask the following using AskUserQuestion (all questions in one message):
+
+1. **Audience Size** — connections + followers count
    - Options: "Under 500", "500-1500", "1500-5000", "5000+"
 
-4. **Preferred Tone** — How do you usually write?
+2. **Post History** — posts published in the last 3 months
+   - Options: "0-2 posts", "3-10 posts", "10+ posts"
+
+3. **Typical Engagement** — average impressions per post
+   - Options: "Under 500", "500-1500", "1500-5000", "5000+"
+
+4. **Preferred Tone**
    - Options: "Formal/professional", "Casual/conversational", "Technical/detailed", "Mixed"
 
-Wait for answers before proceeding. These determine everything: length, structure, boldness of claims.
+5. **Language** — post language
+   - Options: "Russian (RU)", "English (EN)", "Other"
 
-### Pro Tip: Better Data = Better Results
+6. **Network Language** — primary language of the LinkedIn network
+   - Options: "Mostly Russian", "Mostly English", "Mixed / international"
 
-After gathering basic stats, suggest to the user:
+Wait for answers. These determine length, structure, boldness of claims, and realistic reach expectations.
 
-```
-For more personalized recommendations, you can provide:
+### Language x Audience Alignment
 
-1. **Post Analytics Export** (best option)
-   LinkedIn → Analytics → Content → Export
-   This gives me your actual top-performing posts to learn from.
+**Same language (RU->RU or EN->EN):** Proceed normally.
 
-2. **Full Data Export** (comprehensive)
-   LinkedIn → Settings → Data Privacy → Get a copy of your data
-   Select "Posts" and "Articles" — takes ~24h to generate.
+**Mismatch (e.g. writing EN, network is mostly RU):**
 
-3. **Manual examples**
-   Share 2-3 of your best-performing posts (with impressions/engagement).
-   I'll analyze what worked and apply those patterns.
+LinkedIn does not route posts by language — the algorithm distributes based on engagement signals. A mismatch means the existing network sees a foreign-language post, doesn't engage, weak "golden hour" signal follows, and the algorithm limits distribution before the target audience ever sees it.
 
-Without this data, I'll give general recommendations.
-With this data, I can find YOUR winning patterns.
-```
+Warn the user and suggest a transition strategy:
+1. **Parallel posting** — same idea in both languages as separate posts
+2. **Gradual shift** — one post per month in the new language while building connections
+3. **Network-first** — build target-language connections before switching
 
-If user provides analytics data or post examples, analyze them first:
-- What hooks worked best?
-- What length got most engagement?
-- What topics resonated?
-- What tone/style is natural for them?
+Generate the post in the requested language, but set realistic expectations.
 
-Use these insights to tailor recommendations specifically to their audience.
+**Hook style by language:**
+- **EN LinkedIn:** personal story + specific data point performs best
+- **RU LinkedIn:** contrarian statement or practical numbered list performs best
 
-## Step 2: Read the Draft
+## Step 3: Check Profile Context
 
-Read the draft file provided in `$ARGUMENTS`.
+Read `.claude/skills/linkedin-post-optimizer/profile-context.md` if it exists. This file contains additional context about the user's brand, achievements, and content pillars. Use it to enrich recommendations, but Step 2 answers take priority.
 
-If empty or missing:
-```
-Usage: /linkedin-post-optimizer drafts/your-idea.md
+### Hook Pattern Analysis
 
-Create a draft with your raw idea first.
-```
+**10+ posts with engagement data:**
 
-## Step 3: Check Profile Context (Optional)
+Extract hook patterns before writing:
+1. Find the top 2-3 performing posts by impressions or comments
+2. Identify common patterns — specific number, before/after contrast, counterintuitive statement, personal confession
+3. Apply that pattern to the new hook. Do not deviate from proven patterns.
 
-Read `.claude/skills/linkedin-post-optimizer/profile-context.md` if it exists.
+**0-5 posts:**
 
-This file contains additional context about the user's brand, achievements, and content pillars. Use it to enrich recommendations, but the Step 1 answers take priority.
+Not enough signal to analyze patterns. Generate **2 hook variants** in different styles (e.g. one number-led, one story-led) and frame it as an experiment:
 
-## Step 4: Adapt to Profile Level
+> "Since you're still building data on what works for your audience, here are two different hook styles. Try one now, save the other for next time — and see which gets more traction."
 
-**Beginner (SSI < 25, few posts):**
-- Shorter posts (100-150 words)
-- Simple structure
-- One clear point
-- No fancy formatting tricks
-- Build credibility first
+## Step 4: Sharpen the Topic
 
-**Intermediate (SSI 25-50, regular posting):**
-- Medium posts (150-220 words)
-- Can use lists and structure
-- Can make bolder claims (if backed by experience)
+Before writing, evaluate the idea for focus and hook potential. Make **one proactive suggestion** if there is a clear improvement — then wait for the user's reaction.
+
+**Three moves, pick the right one:**
+
+**1. Find the concrete anchor**
+Is there a specific number, fact, or moment? If yes, anchor the hook there. If no, ask: "What's the most specific thing you remember about this? A time, a number, a moment that surprised you?"
+
+**2. Narrow if too broad**
+Signs: covers multiple tools/topics, no clear "before vs after", reads like a category overview.
+Suggest: "This idea covers a lot. What's the ONE thing that surprised you most? Let's build around that."
+
+**3. Expand by combining (dialectical move)**
+Sometimes the idea is good but would be stronger combined with a complementary angle. Look for: an unexpected contrast, a broader pattern the specific story illustrates, a tension between two things.
+Suggest only if the combination is genuinely stronger, not just bigger. The user decides.
+
+**Do NOT start writing until there is a concrete anchor for the hook.**
+
+## Step 5: Adapt to Profile Level
+
+**Beginner (under 500 connections, low impressions):**
+- 100-150 words, simple structure, one clear point
+- No fancy formatting tricks, build credibility first
+
+**Intermediate (500-1500 connections, or 500-1500 impressions/post):**
+- 150-220 words, lists and structure allowed
+- Bolder claims acceptable (if backed by experience)
 - Start experimenting with hooks
 
-**Advanced (SSI 50+, established presence):**
-- Longer posts OK (200-280 words)
-- Can use complex structures
-- Audience trusts your takes
-- Can be more contrarian
+**Advanced (1500+ connections, or 1500+ impressions/post):**
+- 200-280 words, complex structures allowed
+- Audience trusts the takes, can be more contrarian
 
-## Step 5: Structure the Idea
+## Step 6: Structure the Post
 
 Every post needs three parts:
 
 ### Hook (First 2-3 lines)
-What makes someone stop scrolling?
-- A specific detail from their experience
+
+This is the only part visible in the feed before "...more". The reader decides in 1-2 seconds: expand or scroll.
+
+What makes someone stop:
+- A specific detail from experience
 - A number or fact
 - A question that resonates
 - A statement that challenges assumptions
 
-**NOT generic openers like:**
-- "I've been thinking about..."
-- "Here's what I learned..."
-- "Let me share..."
+NOT generic openers like "I've been thinking about...", "Here's what I learned...", "Let me share..."
 
-### Body (The meat)
-- The actual insight, story, or information
-- Structured for easy scanning (short paragraphs, lists if needed)
-- Length depends on profile level (see above)
+### Body
+
+The actual insight, story, or information. Structured for easy scanning (short paragraphs, lists if needed). Length depends on profile level.
 
 ### Conclusion (1-2 lines)
-- A takeaway, question, or call to action
-- ONE thing, not multiple
 
-## Step 6: Remove AI Slop
+**Intermediate and Advanced:** Always end with a question or call to comment. Comments are the #1 driver of algorithmic reach on LinkedIn — 40+ comments can mean 5-10x impressions.
 
-Before finalizing, check for and REMOVE these AI tells:
+Good endings:
+- A specific question about the reader's experience
+- A mild provocation that invites disagreement
+- An open comparison
 
-### Language Patterns to Avoid
-- "In today's fast-paced world..."
-- "It's important to note that..."
-- "Let's dive in..."
-- "Here's the thing..."
-- "Game-changer", "unlock", "leverage", "synergy"
-- Excessive hedging ("I think", "in my opinion", "perhaps")
-- Perfect parallel structure in every list
-- Overly smooth transitions
+Bad endings:
+- Generic "What do you think?" — too vague
+- Just a takeaway with no question
+- Multiple questions — dilutes focus
 
-### Formatting Red Flags
-- Too many emoji (max 1, prefer 0)
-- Perfect bullet point symmetry
-- Headers in a short post
-- Hashtag spam (max 3-5, only if natural)
+**Beginner:** A simple takeaway is fine — focus on clarity, not engagement hacking.
 
-### Voice Check
-Ask: "Would this person actually say this out loud?"
+One question or CTA, not multiple.
 
-If no → rewrite in simpler, more natural language.
+## Step 7: AI Slop Check
 
-### The "First Draft" Test
-The best posts feel slightly raw, like a first draft that was cleaned up — not polished to perfection.
+Read `references/voice-guidelines.md` and apply all checks: language patterns, formatting red flags, voice check, toxic tone rules. Remove anything that fails.
 
-## Step 7: Generate Recommendation
+## Step 8: Generate Output
 
 Output format:
 
 ```
-## Analysis
-
-**Your idea:** [1-sentence summary]
-**Profile level:** [Beginner/Intermediate/Advanced]
-**Suggested length:** [X-Y words]
-**Tone:** [Based on their context]
-
-## Suggested Post
+## Your Post
 
 [The actual post text, ready to copy-paste]
 
-## First Comment (if needed)
-
-[Links, additional context — never in main post]
-
-## Notes
-
-- [Why you structured it this way]
-- [What you removed and why]
-- [Alternative angles they could try]
-```
-
-## Anti-Patterns
-
-**Never do:**
-- Add things they didn't mention (don't invent achievements)
-- Use words they wouldn't use
-- Make it longer than needed
-- Add CTAs if they didn't ask for engagement
-- Force a "viral" structure on a simple thought
-- Use emoji they wouldn't use
-- Add hashtags if they don't normally use them
-
-**Always do:**
-- Preserve their actual voice
-- Keep their specific details and numbers
-- Match their usual post length
-- Respect their style preferences
-- Suggest, don't dictate
-
-## Examples of Voice Preservation
-
-**User writes:** "spent whole weekend debugging this stupid auth bug, finally fixed it by reading the actual docs lol"
-
-**Bad (AI slop):**
-"This weekend, I encountered a challenging authentication bug. After extensive debugging, I discovered the solution was in the documentation all along. Key lesson: always RTFM! 📚 #Engineering #Debugging"
-
-**Good (preserved voice):**
-"Spent the whole weekend on one auth bug. The fix? Actually reading the docs.
-
-Sometimes the answer is embarrassingly obvious."
-
 ---
 
-Remember: Your job is to help them sound like **themselves**, just clearer.
+## Why this hook
+
+[1-2 sentences: what signal it sends, why it earns the "...more" click]
+
+## Alternative hook (if there's a clearly different angle)
+
+[First 2-3 lines only. Skip if the chosen hook is clearly the best fit.]
+
+## First comment (if relevant)
+
+[Links, Telegram channel, additional context — only if the user has one.
+Never in the post body.]
+
+## Quick stats
+
+**Profile level:** [Beginner/Intermediate/Advanced]
+**Length:** [word count]
+**Tone:** [casual / technical / mixed]
+```
+
+## Step 9: Expert Review
+
+**Intermediate and Advanced profiles:** Run automatically.
+**Beginner profiles:** Offer it: "Want me to run this through an external reviewer for a second opinion?"
+
+Review criteria to send to the external model:
+1. **Hook strength** — would you click "...more"? Why or why not?
+2. **AI slop check** — does anything feel machine-generated?
+3. **CTA effectiveness** — does the ending make you want to comment?
+4. **One specific suggestion** — what single change would make the biggest impact?
+
+Present feedback to the user and offer to incorporate it.
+
+## Step 10: Refine Mode
+
+After generating the post (and optionally after expert review), enter an iterative refinement loop.
+
+Ask: "What feels weak to you? Point at specific parts — hook, body, CTA, tone, anything — and I'll rework them."
+
+**Rules:**
+- Rework ONLY flagged parts — do not touch what works
+- Show the updated post with changes highlighted
+- Ask again: "Better? Or still something to fix?"
+- Repeat until approval
+- Never rewrite the entire post unless asked — surgical fixes only
+- Preserve the user's voice and original ideas
+- If user feedback conflicts with expert review, the user wins
+- Track versions (v1 -> v2 -> v3)
+- After 3+ rounds without landing, suggest: "Maybe the core idea needs a different angle? Let's try a fresh hook."
+
+Exit refine mode when the user approves or moves on.
+
+### Data Collection Tips
+
+After delivering the post, suggest this only if the user seems engaged and has 3+ posts:
+
+> To make future posts more tailored, share:
+> 1. **Best posts** — paste 2-3 top performers with impression numbers
+> 2. **Post Analytics Export** — LinkedIn -> Analytics -> Content -> Export
+> 3. **Full LinkedIn Data Export** — LinkedIn -> Settings -> Data Privacy -> Get a copy of your data -> Select "Posts"
