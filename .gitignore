@@ -6,6 +6,7 @@ drafts/
 
 # Agent-specific local config
 .claude/
+.agents/
 
 # OS files
 .DS_Store

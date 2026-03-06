@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "linkedin-post-optimizer": {
+      "source": "Smolevich/agent-skills",
+      "sourceType": "github",
+      "computedHash": "812c78a3a0b13b59c09e59a1ae031b01b60df4170c8b2464166d922f32fc2fcc"
+    }
+  }
+}
