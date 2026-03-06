@@ -1,6 +1,18 @@
 # LinkedIn Post Optimizer
 
-A Claude Code skill that helps you write LinkedIn posts that sound like **you**, not like AI.
+An agent skill that helps you write LinkedIn posts that sound like **you**, not like AI.
+
+Works with Claude Code, Antigravity, Cursor, Codex, Amp, Cline, and [35+ other agents](https://github.com/vercel-labs/skills#supported-agents).
+
+[![skills.sh](https://img.shields.io/badge/skills.sh-linkedin--post--optimizer-blue)](https://skills.sh/Smolevich/linkedin-post-optimizer)
+
+## Installation
+
+```bash
+npx skills add Smolevich/linkedin-post-optimizer
+```
+
+The CLI auto-detects your installed agents and sets up the skill for each one.
 
 ## Philosophy
 
@@ -14,10 +26,11 @@ This is about:
 
 ## Features
 
-- **Adaptive**: Adjusts recommendations based on your SSI, post history, and style
+- **Adaptive**: Adjusts recommendations based on your audience size, post history, and engagement
 - **Voice preservation**: Keeps your words, removes friction
 - **Anti-AI-slop**: Actively removes patterns that scream "ChatGPT wrote this"
-- **Profile-aware**: Different advice for SSI 19 vs SSI 50
+- **Profile-aware**: Different advice for beginners vs advanced profiles
+- **Multilingual**: Supports RU/EN with language-audience mismatch detection
 
 ## What It Does
 
@@ -28,14 +41,6 @@ Your raw idea → Structured post in YOUR voice
 **Input:** Messy notes, bullet points, stream of consciousness
 
 **Output:** Clean post that sounds like you wrote it (because you did — we just organized it)
-
-## Installation
-
-```bash
-# In your project root
-mkdir -p .claude/skills
-git clone https://github.com/Smolevich/linkedin-post-optimizer .claude/skills/linkedin-post-optimizer
-```
 
 ## Setup
 
@@ -48,12 +53,22 @@ git clone https://github.com/Smolevich/linkedin-post-optimizer .claude/skills/li
 
 ## Usage
 
-```bash
-# Create a draft with your raw idea
-echo "My messy thoughts about AI tools..." > drafts/my-post.md
+Once installed, the skill activates automatically when you ask your agent to write or improve a LinkedIn post.
 
-# Run the optimizer
+**Claude Code:**
+```bash
+# Via slash command
 /linkedin-post-optimizer drafts/my-post.md
+
+# Or just ask
+# "Help me write a LinkedIn post about my AI tools setup"
+```
+
+**Codex / Antigravity / Cursor / other agents:**
+```
+# Just ask naturally — the skill triggers automatically
+"Write a LinkedIn post about switching from Cursor to CLI-first AI workflow"
+"Help me draft a post about my experience with AI agents"
 ```
 
 ## Structure (Universal)
