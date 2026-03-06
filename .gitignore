@@ -4,9 +4,13 @@ profile-context.md
 # Personal drafts
 drafts/
 
-# Agent-specific local config
+# Agent-specific local config (created by npx skills add)
 .claude/
 .agents/
+.agent/
+.junie/
+.vibe/
+skills-lock.json
 
 # OS files
 .DS_Store
