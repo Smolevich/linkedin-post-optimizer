@@ -236,6 +236,27 @@ Ask: "What feels weak to you? Point at specific parts — hook, body, CTA, tone,
 
 Exit refine mode when the user approves or moves on.
 
+## Step 11: Reach Optimization
+
+After the user approves the text (Step 10), perform a final "Reach Check" to maximize distribution:
+
+### 1. Niche Hashtags
+Suggest 3-5 specific, non-generic hashtags based on the content.
+- **Rule:** No #success, #motivation, #career.
+- **Goal:** Help the LinkedIn algorithm categorize the post (e.g., #engineeringmanagement, #obsstudio, #leadershipdevelopment).
+
+### 2. CTA Opening Check
+Analyze the closing question. If it's a binary "Yes/No" question (e.g., "Do you agree?"), suggest a more open-ended version that encourages longer comments.
+- **Example:** Instead of "Do you use AI?" -> "What's the most surprising result an AI tool gave you this week?"
+
+### 3. Tagging (Optional)
+If the user mentions a specific product or person constructively, suggest tagging them: "Tagging the creator/company can help start a direct dialogue."
+
+### 4. Golden Hour Tip
+Remind the user: "LinkedIn prioritizes posts with early engagement. Post during your network's active hours (usually 9-11 AM or 2-4 PM) and stay active to reply to the first comments."
+
+Exit skill mode once these final tips are provided.
+
 ### Data Collection Tips
 
 After delivering the post, suggest this only if the user seems engaged and has 3+ posts:
